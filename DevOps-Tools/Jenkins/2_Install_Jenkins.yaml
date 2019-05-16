@@ -16,7 +16,8 @@ spec:
       initContainers:
       - name: volume-mount-hack
         image: busybox
-        command: ["sh", "-c", "chown -R 1000:1000 /var/jenkins_home"]
+        command: ["/bin/sh"]
+        args: ["-c", "chown -R 1000:1000 /var/jenkins_home"]
         volumeMounts:
             - name: jenkins-persistent-storage
               mountPath: /var/jenkins_home 

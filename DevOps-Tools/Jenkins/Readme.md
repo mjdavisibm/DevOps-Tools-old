@@ -14,6 +14,9 @@ Once the Kubernetes cluster has been created follow these steps to install the o
 
 We will be _deploying_ the DockerHub.com container using a Kubernetes Deployment artifact that will automatically create a Pod and ReplicaSet
 
+* DockerHub Location: Official site [jenkins/jenkins](https://hub.docker.com/r/jenkins/jenkins/)
+* GitHub Location: [jenkinsci/jenkins](https://github.com/jenkinsci/jenkins)
+
 
 ##1. Create a Kubernetes namespace for all Jenkins artifacts.
 
@@ -51,4 +54,36 @@ Again using the `+Create` button in the top right of the Kubernetes Dashboard.
 	1. Paste the text from the 3_Allow_Jenkins_Access.yaml file found in in this directory into the text box
 	2. Press the upload button
 
-##5. 
+##5. Login to Jenkins for the first time
+To login to Jenkins for the first time you need two things
+
+1. The correct url and port to the Jenkins service
+2. The admin password that is stored in `/var/jenkins_home`. 
+
+###Finding the correct http url.
+This is a simple task of going back to the main IKS dashboard and selecting he `overview` tab. IKS automatically allocates a DNS name to the cluster. You will find the DNS name in `ingress subdomain'. The port number is what we set up in the services object in previous step, i.e. 30000. To access Jenkins you will type in a web browser something like this
+
+	http://devops-cluster.us-south.containers.appdomain.cloud:30000/
+
+This will give you a login screen
+
+###Finding the admin password
+This is stored in the Jenkins home directory of the pod. Using the `Web Terminal (beta)` in the IKS dashboard type the following
+
+
+	$ kubectl get pods --namespace=jenkins
+	-->> The output will look something like this 
+	NAME                                 READY   STATUS    RESTARTS   AGE
+	jenkins-deployment-596bd4555-pnf8m   1/1     Running   0          24h
+	
+	$ kubectl exec --namespace=jenkins -it jenkins-deployment-596bd4555-pnf8m -- /bin/bash
+	--> This will give you a shell prompt within the POD. The terminal should say something like
+	jenkins@jenkins-deployment-596bd4555-pnf8m:/$
+	
+	$ cat /var/jenkins_home/secrets/initialAdminPassword
+	--> The output is the password. The terminal will look something like
+	11eefb9b3741413382b65989d1217579
+	
+Now all you need to do is copy that password and use it in the dialog box that pops up when you open the the URL above
+* user name: `admin`
+* password: `11eefb9b3741413382b65989d1217579` from above
