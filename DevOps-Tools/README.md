@@ -6,6 +6,13 @@ This repository contains instruction to set up a DevOps-Tools Kubernetes solutio
 1. **YAML-Scripts** - this walks you through step by step to install each DevOps-Tool using yaml scripts,  commands to the `Web Console (beta)`, recommended instructions to setup each tool, and education modules to learn how to use the DevOps tool
 1. **Helm-Scripts** - this walks you through installing the DevOps-Tools using Helm Charts - A faster and less error prone way of installing the tools as it combines the many yaml files into a chart to install the DevOps tools.
 
+[added from a difference readme]
+This repository describes two ways to install the DevOps tools
+1. Using yaml files to setup the DevOps tool in the cluster. Most of this will be done via the Kubernetes Dashboard and command line using Command Line Interface (CLI) tools such as `kubectl`.
+2. Using Helm charts - usually just one - to install all the necessary 
+
+
+
 ##The DevOps tools currently described are as follows
 1. Chart Museum - A Helm Chart Repository to allow you to use your own Helm Charts. we also use it to install some of the DevOps-Tools
 1. Jenkins for automated building of ...

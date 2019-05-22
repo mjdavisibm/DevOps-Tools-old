@@ -17,22 +17,26 @@ spec:
       - name: volume-mount-hack
         image: busybox
         command: ["/bin/sh"]
-        args: ["-c", "chown -R 1000:1000 /charts"]
+        args: ["-c", "chown -R 1000:1000 /var/charts"]
         volumeMounts:
-            - name: museumcharts-persistent-storage
-              mountPath: /charts 
+            - name: chartmuseum-persistent-storage
+              mountPath: /var/charts 
       containers:
       - name: chartmuseum
         image: chartmuseum/chartmuseum
         ports:
         - containerPort: 8080
         env:
-           STORAGE: local
-           STORAGE_LOCAL_ROOTDIR: /charts
+        - name: STORAGE
+          value: "local"
+        - name: STORAGE_LOCAL_ROOTDIR
+          value: "/var/charts"
+        - name: DEBUG
+          value: "1"
         volumeMounts:
-              - name: museumcharts-persistent-storage
-                mountPath: /charts
+              - name: chartmuseum-persistent-storage
+                mountPath: /var/charts
       volumes:
-      - name: museumcharts-persistent-storage
+      - name: chartmuseum-persistent-storage
         persistentVolumeClaim:
-           claimName: museumcharts-data
+           claimName: chartmuseum-data

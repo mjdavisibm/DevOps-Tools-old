@@ -25,20 +25,12 @@ Using IBM Cloud's built in `Web Terminal (beta)` create a `jenkins` namespace by
 	$ kubectl create ns jenkins
 ##2. Create persistent storage for Jenkins artifacts. 
 
-> 
-This will ensure that if the Pod goes down that your Jenkins artifacts will not also be blown away.
+> This will ensure that if the Pod goes down that your Jenkins artifacts will not also be blown away.
 
-Using the Kubernetes Dashboard click the `+Create` button in the top right. We will be pasting YAML text into the `CREATE FROM TEXT INPUT` tab.
-
-	1. Paste the text from the 1_PVC_Setup.yaml file found in in this directory into the text box
-	2. Press the upload button
+Using the Kubernetes Dashboard click the `+Create` button in the top right. Paste the `1_PVC_Setup.yaml` file into the `CREATE FROM TEXT INPUT` tab and press upload.
 	
 ##3. Installing the Jenkins container from GitHub
-
-Following the same cutting and pasting model decribed above
-
-	1. Paste the text from the 2_Install_Jenkin.yaml file found in in this directory into the text box
-	2. Press the upload button
+Using the Kubernetes Dashboard click the `+Create` button in the top right. Paste the `2_Install_Jenkin.yaml` file into the `CREATE FROM TEXT INPUT` tab and press upload.
 	
 ######Couple of points to note
 * The official Jenkins DockerHub container is called [jenkins/jenkins](https://hub.docker.com/r/jenkins/jenkins/)
@@ -47,18 +39,15 @@ Following the same cutting and pasting model decribed above
 * The `InitContainer:` section is executed first and installs [BusyBox](https://hub.docker.com/_/busybox). BusyBox combines tiny versions of many common UNIX utilities into a single small container (1-5 MB). It's fast to download and install. The `command:` section that changes the ownership of `/var/jenkins_home` to the Jenkins user and group. Thus when the main `container:` section executes and tries to write configuration information into the home directory it is actually authorized to do that.
 
 ##4. Allowing access to the Jenkins instance so you can Login.
-Kubernetes requires  a `Service` object to be created in order for users to access the Jenkins application. 
+Kubernetes requires  a `Service` object to be created in order for users to access the applications. 
+Using the Kubernetes Dashboard click the `+Create` button in the top right. Paste the `3_Allow_Access.yaml` file into the `CREATE FROM TEXT INPUT` tab and press upload.
 
-Again using the `+Create` button in the top right of the Kubernetes Dashboard.
-
-	1. Paste the text from the 3_Allow_Jenkins_Access.yaml file found in in this directory into the text box
-	2. Press the upload button
 
 ##5. Login to Jenkins for the first time
 To login to Jenkins for the first time you need two things
 
 1. The correct url and port to the Jenkins service
-2. The admin password that is stored in `/var/jenkins_home`. 
+2. The admin password that is stored in `/var/jenkins_home`
 
 ###Finding the correct http url.
 This is a simple task of going back to the main IKS dashboard and selecting he `overview` tab. IKS automatically allocates a DNS name to the cluster. You will find the DNS name in `ingress subdomain'. The port number is what we set up in the services object in previous step, i.e. 30000. To access Jenkins you will type in a web browser something like this
